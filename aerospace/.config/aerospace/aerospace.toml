@@ -1,0 +1,183 @@
+# ~/.config/aerospace/aerospace.toml
+# i3-flavoured AeroSpace config. mod = alt (option).
+
+config-version = 2
+
+start-at-login = true
+
+after-login-command = []
+after-startup-command = [
+  'exec-and-forget sketchybar',
+]
+
+# Tree normalization — keeps the layout predictable. Turn both off if you want
+# raw i3 container semantics, but you probably don't.
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'   # wide monitor -> horizontal
+
+# Warp the pointer when the focused monitor changes, so focus-follows-mouse
+# and click targets stay sane.
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Unhide apps that macOS hid with cmd-h when you focus them
+automatically-unhide-macos-hidden-apps = false
+
+# Tell sketchybar which workspace is live
+exec-on-workspace-change = [
+  '/bin/bash', '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE'
+]
+
+[key-mapping]
+preset = 'qwerty'
+
+[gaps]
+# Bump outer.top to your sketchybar height
+inner.horizontal = 4
+inner.vertical   = 4
+outer.left       = 4
+outer.bottom     = 4
+outer.top        = 4
+outer.right      = 4
+
+# ---------------------------------------------------------------------------
+# main mode
+# ---------------------------------------------------------------------------
+[mode.main.binding]
+
+alt-right = 'workspace next'
+alt-left  = 'workspace prev'
+
+# and the "take the window with me" variants:
+alt-shift-right = 'move-node-to-workspace --focus-follows-window next'
+alt-shift-left  = 'move-node-to-workspace --focus-follows-window prev'
+
+# --- launching -------------------------------------------------------------
+alt-enter = 'exec-and-forget open -na Ghostty'
+# app launcher, if you want one bound here:
+# alt-d = 'exec-and-forget open -a Raycast'
+
+# --- layout ----------------------------------------------------------------
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+alt-f     = 'fullscreen'
+alt-shift-space = 'layout floating tiling'
+
+# --- focus -----------------------------------------------------------------
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# --- move ------------------------------------------------------------------
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# --- quick resize ----------------------------------------------------------
+alt-minus  = 'resize smart -50'
+alt-equal  = 'resize smart +50'
+alt-r      = 'mode resize'
+
+# --- workspaces ------------------------------------------------------------
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 10'
+
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-0 = 'move-node-to-workspace 10'
+
+alt-tab = 'workspace-back-and-forth'
+
+# --- monitors --------------------------------------------------------------
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+# --- modes -----------------------------------------------------------------
+alt-shift-semicolon = 'mode service'
+
+# ---------------------------------------------------------------------------
+# resize mode  (alt-r, esc to leave)
+# ---------------------------------------------------------------------------
+[mode.resize.binding]
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
+minus = 'resize smart -50'
+equal = 'resize smart +50'
+b = 'balance-sizes'
+enter = 'mode main'
+esc = 'mode main'
+
+# ---------------------------------------------------------------------------
+# service mode  (alt-shift-;)  — i3's mod+shift+{c,r} territory
+# ---------------------------------------------------------------------------
+[mode.service.binding]
+esc       = ['reload-config', 'mode main']
+r         = ['flatten-workspace-tree', 'mode main']   # reset layout
+f         = ['layout floating tiling', 'mode main']
+backspace = ['close-all-windows-but-current', 'mode main']
+
+# join a window into its neighbour's container
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']
+
+down = 'volume down'
+up = 'volume up'
+shift-down = ['volume set 0', 'mode main']
+
+# ---------------------------------------------------------------------------
+# pin workspaces to monitors (optional)
+# ---------------------------------------------------------------------------
+[workspace-to-monitor-force-assignment]
+# 1 = 'main'
+# 2 = 'main'
+# 9 = 'secondary'
+
+# ---------------------------------------------------------------------------
+# per-app rules
+# ---------------------------------------------------------------------------
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ActivityMonitor'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+if.window-title-regex-substring = 'Info$'
+run = ['layout floating']
+
+#maybe stop raycast from automatically triggering on workspace swap
+[[on-window-detected]]
+if.app-id = 'com.raycast.macos'
+run = ['layout floating']
+
+# Example: always send the browser to workspace 2
+# [[on-window-detected]]
+# if.app-id = 'org.mozilla.firefox'
+# run = ['move-node-to-workspace 2']
