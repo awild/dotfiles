@@ -58,6 +58,7 @@ alt-shift-left  = 'move-node-to-workspace --focus-follows-window prev'
 
 # --- launching -------------------------------------------------------------
 alt-enter = 'exec-and-forget open -na Ghostty'
+alt-b = 'exec-and-forget open -na Firefox --args --new-window'
 # app launcher, if you want one bound here:
 # alt-d = 'exec-and-forget open -a Raycast'
 
