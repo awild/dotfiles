@@ -41,7 +41,7 @@ main() {
         esac
     done
 
-    command -v stow >/dev/null || die "GNU Stow is not installed; try 'brew install stow'"
+    command -v stow >/dev/null || die "GNU Stow is not installed; install it with brew or your package manager"
     [[ -f "$MANIFEST" ]] || die "no package list at ${MANIFEST#$REPO/}; create it to enrol this host"
 
     local -a packages=()
